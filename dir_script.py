@@ -4,6 +4,9 @@ import os
 import argparse
 from pathlib import Path
 
+from base.styles import print_boxed_message
+
+
 def create_directory_structure(company_name):
     base_dir = Path(f"{company_name} Company")
     structure = {
@@ -21,12 +24,6 @@ def create_directory_structure(company_name):
             dir_path = base_dir / parent / subdir
             dir_path.mkdir(parents=True, exist_ok=True)
             print(f"    Created: {subdir}")
-
-def print_boxed_message(message):
-    border = f"+{'-' * (len(message)+4)}+"
-    print(border)
-    print(f"|  {message}  |")
-    print(border)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create directory structure for a company.")

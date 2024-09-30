@@ -10,6 +10,7 @@ path_destiny = Path('./records')
 # Crear la carpeta de destino si no existe
 path_destiny.mkdir(parents=True, exist_ok=True)
 
+
 # Función para extraer la fecha del nombre del archivo
 def extraer_fecha(nombre_archivo):
     # Buscar la parte que contiene la fecha en el formato _ddmmaa_
@@ -19,11 +20,13 @@ def extraer_fecha(nombre_archivo):
             return parte
     return None  # 240826
 
+
 def get_contact_name(nombre_archivo):
     parts = nombre_archivo.split('_')
     if len(parts) >= 1:
         return parts[0].replace('Grabación de llamada ', '').replace('Call recording ', '')
     return "Desconocido"
+
 
 # Iterar sobre los archivos en la carpeta de origen
 for archivo in path_source.iterdir():
