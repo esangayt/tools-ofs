@@ -53,3 +53,4 @@ for archivo in path_source.iterdir():
                 print(f'Error moviendo el archivo {archivo.name}: {e}')
         else:
             print(f'Fecha no encontrada en el archivo: {archivo.name}')
+
