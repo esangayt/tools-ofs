@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 from base.styles import print_boxed_message, print_boxed_message_custom
-
+from datetime import datetime
 
 class DirectoryStructure:
     def __init__(self, company_name):
@@ -30,6 +30,9 @@ class DirectoryStructure:
                 dir_path = self.base_dir / parent / subdir
                 dir_path.mkdir(parents=True, exist_ok=True)
                 print(f"    Created: {subdir}")
+
+        create_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"\nDirectory structure created at {create_time}")
 
 
 def main():
