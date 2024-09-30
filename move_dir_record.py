@@ -19,6 +19,11 @@ def extraer_fecha(nombre_archivo):
             return parte
     return None  # 240826
 
+def get_contact_name(nombre_archivo):
+    parts = nombre_archivo.split('_')
+    if len(parts) >= 1:
+        return parts[0].replace('Grabación de llamada ', '').replace('Call recording ', '')
+    return "Desconocido"
 
 # Iterar sobre los archivos en la carpeta de origen
 for archivo in path_source.iterdir():
@@ -30,12 +35,15 @@ for archivo in path_source.iterdir():
                 # Convertir la fecha a un objeto datetime
                 fecha = datetime.strptime(fecha_str, '%y%m%d')
                 # Obtener el nombre del mes y el año
-                nombre_mes = fecha.strftime('%Y/%B')  # Ejemplo: 'September_2024'
-                carpeta_mes = path_destiny / nombre_mes
+                nombre_mes = fecha.strftime('%Y/%B')  # Ejemplo: '2024/September'
+
+                # Obtener el nombre del contacto
+                contact_name = get_contact_name(archivo.name)
+
+                carpeta_mes = path_destiny / nombre_mes / contact_name
                 # Crear la carpeta para ese mes si no existe
                 carpeta_mes.mkdir(parents=True, exist_ok=True)
                 archivo_destino = carpeta_mes / archivo.name
-
                 shutil.move(str(archivo), str(archivo_destino))
                 print(f'Movido: {archivo.name} a {carpeta_mes}')
             except Exception as e:
