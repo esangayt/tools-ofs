@@ -1,15 +1,14 @@
 import os
 import shutil
 from datetime import datetime
+from pathlib import Path
 
-ruta_origen = '.'
-
+path_source = Path('.')
 # Ruta base donde se moverán los archivos
-ruta_destino = './nuev'
+path_destiny = Path('./records')
 
 # Crear la carpeta de destino si no existe
-if not os.path.exists(ruta_destino):
-    os.makedirs(ruta_destino)
+path_destiny.mkdir(parents=True, exist_ok=True)
 
 # Función para extraer la fecha del nombre del archivo
 def extraer_fecha(nombre_archivo):
@@ -18,29 +17,28 @@ def extraer_fecha(nombre_archivo):
     for parte in partes:
         if len(parte) == 6 and parte.isdigit():
             return parte
-    return None #240826
+    return None  # 240826
+
 
 # Iterar sobre los archivos en la carpeta de origen
-for archivo in os.listdir(ruta_origen):
-    if os.path.isfile(os.path.join(ruta_origen, archivo)):
+for archivo in path_source.iterdir():
+    if archivo.is_file():
         # Extraer la fecha del nombre del archivo
-        fecha_str = extraer_fecha(archivo)
+        fecha_str = extraer_fecha(archivo.name)
         if fecha_str:
-            # Convertir la fecha a un objeto datetime
-            fecha = datetime.strptime(fecha_str, '%y%m%d')
+            try:
+                # Convertir la fecha a un objeto datetime
+                fecha = datetime.strptime(fecha_str, '%y%m%d')
+                # Obtener el nombre del mes y el año
+                nombre_mes = fecha.strftime('%Y/%B')  # Ejemplo: 'September_2024'
+                carpeta_mes = path_destiny / nombre_mes
+                # Crear la carpeta para ese mes si no existe
+                carpeta_mes.mkdir(parents=True, exist_ok=True)
+                archivo_destino = carpeta_mes / archivo.name
 
-            # Obtener el nombre del mes y el año
-            nombre_mes = fecha.strftime('%B_%Y')  # Ejemplo: 'September_2024'
-
-            # Crear la carpeta para ese mes si no existe
-            carpeta_mes = os.path.join(ruta_destino, nombre_mes)
-            if not os.path.exists(carpeta_mes):
-                os.makedirs(carpeta_mes)
-
-            # Mover el archivo a la carpeta correspondiente
-            archivo_origen = os.path.join(ruta_origen, archivo)
-            archivo_destino = os.path.join(carpeta_mes, archivo)
-            shutil.move(archivo_origen, archivo_destino)
-            print(f'Movido: {archivo} a {carpeta_mes}')
+                shutil.move(str(archivo), str(archivo_destino))
+                print(f'Movido: {archivo.name} a {carpeta_mes}')
+            except Exception as e:
+                print(f'Error moviendo el archivo {archivo.name}: {e}')
         else:
-            print(f'Fecha no encontrada en el archivo: {archivo}')
+            print(f'Fecha no encontrada en el archivo: {archivo.name}')
