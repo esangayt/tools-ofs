@@ -2,27 +2,35 @@
 
 import os
 import argparse
+from pathlib import Path
 
 def create_directory_structure(company_name):
-    base_dir = f"{company_name} Company"
+    base_dir = Path(f"{company_name} Company")
     structure = {
         "EPT": ["evidence/credentials", "evidence/data", "evidence/screenshots", "logs", "scans", "scope", "tools"],
         "IPT": ["evidence/credentials", "evidence/data", "evidence/screenshots", "logs", "scans", "scope", "tools"]
     }
 
-    if os.path.exists(base_dir):
-        print(f"Directory already exists: {base_dir}")
+    if base_dir.exists():
+        print(f"Directory {base_dir} already exists.")
         return
 
     for parent, subdirs in structure.items():
+        print_boxed_message(f"Creating directory structure for {parent}")
         for subdir in subdirs:
-            dir_path = os.path.join(base_dir, parent, subdir)
-            os.makedirs(dir_path, exist_ok=True)
-            print(f"Created: {dir_path}")
+            dir_path = base_dir / parent / subdir
+            dir_path.mkdir(parents=True, exist_ok=True)
+            print(f"    Created: {subdir}")
+
+def print_boxed_message(message):
+    border = f"+{'-' * (len(message)+4)}+"
+    print(border)
+    print(f"|  {message}  |")
+    print(border)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create directory structure for a company.")
-    parser.add_argument('name', type=str, help="Name of the company")
+    parser.add_argument("-a", '--name', type=str, required=True, help="Name of the company")
 
     args = parser.parse_args()
     create_directory_structure(args.name)
