@@ -5,13 +5,15 @@ from pathlib import Path
 from base.styles import print_boxed_message, print_boxed_message_custom
 from datetime import datetime
 
+SUBDIRS = ["evidence/credentials", "evidence/data", "evidence/screenshots", "logs", "scans", "scope"]
+
 class DirectoryStructure:
     def __init__(self, company_name):
         self.company_name = company_name
         self.base_dir = Path(f"{company_name} Company")
         self.structure = {
-            "EPT": ["evidence/credentials", "evidence/data", "evidence/screenshots", "logs", "scans", "scope", "tools"],
-            "IPT": ["evidence/credentials", "evidence/data", "evidence/screenshots", "logs", "scans", "scope", "tools"]
+            "EPT": SUBDIRS,
+            "IPT": SUBDIRS
         }
 
     def is_new_dir(self):
