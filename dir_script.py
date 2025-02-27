@@ -5,16 +5,21 @@ from pathlib import Path
 from base.styles import print_boxed_message, print_boxed_message_custom
 from datetime import datetime
 
-SUBDIRS = ["evidence/credentials", "evidence/data", "evidence/screenshots", "logs", "scans", "scope"]
+SUBDIRS = [
+    "evidence/credentials",
+    "evidence/data",
+    "evidence/screenshots",
+    "logs",
+    "scans",
+    "scope",
+]
+
 
 class DirectoryStructure:
     def __init__(self, company_name):
         self.company_name = company_name
         self.base_dir = Path(f"{company_name} Company")
-        self.structure = {
-            "EPT": SUBDIRS,
-            "IPT": SUBDIRS
-        }
+        self.structure = {"EPT": SUBDIRS, "IPT": SUBDIRS}
 
     def is_new_dir(self):
         if self.base_dir.exists():
@@ -30,6 +35,7 @@ class DirectoryStructure:
             print_boxed_message(f"Creating directory structure for {parent}")
             for subdir in subdirs:
                 dir_path = self.base_dir / parent / subdir
+
                 dir_path.mkdir(parents=True, exist_ok=True)
                 print(f"    Created: {subdir}")
 
@@ -38,8 +44,12 @@ class DirectoryStructure:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Create directory structure for a company.")
-    parser.add_argument("-a", '--name', type=str, required=True, help="Name of the company")
+    parser = argparse.ArgumentParser(
+        description="Create directory structure for a company."
+    )
+    parser.add_argument(
+        "-a", "--name", type=str, required=True, help="Name of the company"
+    )
 
     args = parser.parse_args()
     ds = DirectoryStructure(args.name)
